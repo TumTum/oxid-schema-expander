@@ -1,0 +1,22 @@
+{
+    "name": "tumtum/oxid-schema-expander",
+    "description": "Library to modify the OXID eShop database. Ideal for OXID modules to have their tables.",
+    "require": {},
+    "require-dev": {
+        "phpspec/phpspec": "^6",
+        "oxid-esales/oxideshop-ce": "~6.2.0",
+        "oxid-esales/oxideshop-facts": "~2.3.0",
+        "oxid-esales/oxideshop-unified-namespace-generator": "~1.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "tm\\oxid\\SchemaExpander\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tobias Matthaiou",
+            "email": "225997+TumTum@users.noreply.github.com"
+        }
+    ]
+}

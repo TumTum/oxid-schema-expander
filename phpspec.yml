@@ -1,0 +1,4 @@
+suites:
+  default:
+    namespace: tm\oxid\SchemaExpander
+    psr4_prefix: tm\oxid\SchemaExpander
