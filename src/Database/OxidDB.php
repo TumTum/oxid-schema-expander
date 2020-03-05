@@ -12,31 +12,20 @@ use OxidEsales\Eshop\Core\DatabaseProvider;
 class OxidDB implements ConnectorInterface
 {
     /**
-     * @var \DatabaseInterface
-     */
-    protected $db;
-
-    /**
-     * OxidDB constructor.
-     */
-    public function __construct()
-    {
-        $this->db = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
-    }
-
-    /**
      * @param $sql_stm
+     * @return array
      */
     public function getAll($sql_stm)
     {
-        return $this->db->getAll($sql_stm);
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->getAll($sql_stm);
     }
 
     /**
      * @param $sql_stm
+     * @return int|mixed
      */
     public function execute($sql_stm)
     {
-        return $this->db->execute($sql_stm);
+        return DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC)->execute($sql_stm);
     }
 }
