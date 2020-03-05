@@ -79,23 +79,14 @@ class ExtendTables
     }
 
     /**
-     * @param TableInterface $sTable
+     * @param TableInterface $table
      */
-    protected function extendTable(TableInterface $sTable)
+    protected function extendTable(TableInterface $table)
     {
-        $stm = 'SHOW COLUMNS FROM ' . $sTable->getTableName();
-        $aDbColsRaw = $this->db->getAll($stm);
-        $actuallyColumns = [];
-
-        foreach ($aDbColsRaw as $aArr) {
-            if (!isset($aArr['Field'])) {
-                throw new \Exception("SQL Statement failed $stm' has not fields");
-            }
-            $actuallyColumns[] = strtoupper($aArr['Field']);
-        }
+        $actuallyColumns = $this->getColumnsFrom($table->getTableName());
 
         /** @var FieldInterface $Column */
-        foreach ($sTable->getFields() as $Column) {
+        foreach ($table->getFields() as $Column) {
 
             $columnName = strtoupper($Column->getName());
             if (in_array($columnName, $actuallyColumns) === false) {
@@ -104,7 +95,7 @@ class ExtendTables
 
                 $sAlterSQL = sprintf(
                     'ALTER TABLE `%s` ADD COLUMN `%s` %s %s',
-                    $sTable->getTableName(),
+                    $table->getTableName(),
                     $columnName,
                     $Column->getAlterStm(),
                     $sAfterStm
@@ -160,5 +151,24 @@ class ExtendTables
             $alter = sprintf('ALTER TABLE `%s` ADD %s', $sTable->getTableName(), $key);
             $this->db->execute($alter);
         }
+    }
+
+    /**
+     * @param string $tablename
+     * @return array
+     */
+    protected function getColumnsFrom($tablename)
+    {
+        $stm = 'SHOW COLUMNS FROM ' . $tablename;
+
+        $aDbColsRaw = $this->db->getAll($stm);
+
+        return array_map(function ($row) {
+            if (!isset($row['Field'])) {
+                throw new \Exception("SQL Statement failed: Row has not 'Field'-Key: " . var_export($row, true));
+            }
+
+            return strtoupper($row['Field']);
+        }, $aDbColsRaw);
     }
 }
